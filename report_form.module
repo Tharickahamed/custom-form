@@ -1,0 +1,105 @@
+<?php
+
+function report_form_menu() {
+  $items = array();
+
+  $items['form/report_form'] = array( //this creates a URL that will call this form at "examples/form-example"
+    'title' => 'Custom Report Form', //page title
+    'description' => 'You can send custom report to database.',
+    'page callback' => 'drupal_get_form', //this is the function that will be called when the page is accessed.  for a form, use drupal_get_form
+    'page arguments' => array('report_form_form'), //put the name of the form here
+    'access callback' => TRUE
+  );
+
+  return $items;
+}
+
+function report_form_form($form, &$form_state) {
+  
+  $form['first_name'] = array(
+    '#type' => 'textfield', //you can find a list of available types in the form api
+    '#title' => 'Enter your First Name',
+    '#size' => 30,
+    '#maxlength' => 100,
+    '#required' => TRUE, //make this field required 
+  );
+  
+  $form['last_name'] = array(
+    '#type' => 'textfield', //you can find a list of available types in the form api
+    '#title' => 'Enter your Last Name',
+    '#size' => 30,
+  );
+  
+  $form['phone'] = array(
+    '#type' => 'textfield', //you can find a list of available types in the form api
+    '#title' => 'Enter Your Phone Number',
+	'#default_value' => '',
+    '#size' => 30,
+    '#maxlength' => 100,
+	'#field_prefix' => '+91',
+  );
+  
+  $form['email'] = array(
+    '#type' => 'textfield', //you can find a list of available types in the form api
+    '#title' => 'Enter your Email ID',
+    '#size' => 30,
+    '#maxlength' => 100,
+    '#required' => TRUE, //make this field required 
+  );
+  
+  $form['subject'] = array(
+    '#type' => 'textfield', //you can find a list of available types in the form api
+    '#title' => 'Enter your Subject',
+    '#size' => 30,
+    '#maxlength' => 100,
+    '#required' => TRUE, //make this field required 
+  );
+  
+  $form['comments'] = array(
+    '#type' => 'textarea', //you can find a list of available types in the form api
+    '#title' => 'Put your Comments',
+    '#size' => 30,
+    '#maxlength' => 200,
+  );
+  
+  $form['submit_button'] = array(
+    '#type' => 'submit',
+    '#value' => t('Click Here!'),
+  );
+  
+  return $form;
+}
+
+function report_form_form_validate($form, &$form_state) {
+	if (!($form_state['values']['phone'] > 0)){
+		form_set_error('phone', t('Phone number must be a integer number.'));
+	}
+	if (!valid_email_address($form_state['values']['email'])) {
+		form_set_error('email', t('Email must be a valid.'));
+   }
+}
+
+
+/**
+ * Implements security_settings_form_submit().
+ */
+function report_form_form_submit($form, $form_state) {
+  global $user; 
+  // Here u can insert Your custom form values into your custom report_form.
+  db_insert('report_form')
+    ->fields(array(
+	  'first_name' => $form_state['values']['first_name'],
+	  'last_name' => $form_state['values']['last_name'],
+      'phone' => $form_state['values']['phone'],  
+	  'email' => $form_state['values']['email'],
+	  'subject' => $form_state['values']['subject'],
+      'comments' => $form_state['values']['comments'],       
+    ))->execute();
+    drupal_set_message("Successfully saved into Reporting table"); 
+}
+
+
+
+
+
+

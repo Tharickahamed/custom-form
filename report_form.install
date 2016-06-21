@@ -1,0 +1,62 @@
+<?php
+function report_form_schema()    {
+     
+	 $schema['report_form'] = array(
+
+     'description' => 'Creating custom report table',
+	 
+     'fields' => array(
+       'rid' => array(
+        'description' => 'make report id primary key auto increment',
+        'type' => 'serial',
+        'not null' => TRUE,
+       ),
+      'first_name' => array(
+        'description' => 'First Name',
+        'type' => 'varchar',
+        'length' => '100',
+        'not null' => TRUE,
+      ),
+      'last_name' => array(
+		'description' => 'Last Name',
+		'type' => 'varchar',
+		'length' => '100',
+		'not null' => TRUE,
+      ),
+	  'phone' => array(
+		'description' => 'Phone',
+		'type' => 'varchar',
+		'length' => '100',
+		'not null' => TRUE,
+      ),
+	  'email' => array(
+		'description' => 'Email',
+		'type' => 'varchar',
+		'length' => '100',
+		'not null' => TRUE,
+      ),
+	  'subject' => array(
+		'description' => 'Subject',
+		'type' => 'varchar',
+		'length' => '100',
+		'not null' => TRUE,
+      ),
+	  'comments' => array(
+		'description' => 'Comments',
+		'type' => 'varchar',
+		'length' => '200',
+		'not null' => TRUE,
+      ),
+	 ),
+		'primary key' => array('rid'),
+	 );
+	return $schema;
+}
+
+function make_application_install() {
+	drupal_install_schema('report_form');
+}
+
+function make_application_uninstall() {
+	drupal_uninstall_schema('report_form');
+}

@@ -1,0 +1,5 @@
+core = "7.x"
+description = "Custom reporting form"
+name = "Report Form"
+package = "Custom"
+version = "7.1"
